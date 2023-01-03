@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:price_car/TextFieldwidget.dart';
 
@@ -20,14 +21,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
+  MyHomePage({super.key});
+  final TextEditingController textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -169,7 +170,6 @@ class MyHomePage extends StatelessWidget {
               const SizedBox(
                 height: 25,
               ),
-
               Expanded(
                 child: ListView(
                   children: [
@@ -189,15 +189,15 @@ class MyHomePage extends StatelessWidget {
                           ),
                           SizedBox(
                               width: size.width / 2.5,
-                              child:
-                                  dropdownButton(selectedItem, items, textTheme)),
+                              child: dropdownButton(
+                                  selectedItem, items, textTheme)),
                         ],
                       ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-              
+
                     // brand
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -247,7 +247,7 @@ class MyHomePage extends StatelessWidget {
                     const SizedBox(
                       height: 25,
                     ),
-                    
+
                     // color
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -312,8 +312,8 @@ class MyHomePage extends StatelessWidget {
                           ),
                           SizedBox(
                               width: size.width / 2.5,
-                              child: dropdownButton(
-                                  selectedBodyConditionItem, BodyCondition, textTheme)),
+                              child: dropdownButton(selectedBodyConditionItem,
+                                  BodyCondition, textTheme)),
                         ],
                       ),
                     ),
@@ -336,8 +336,8 @@ class MyHomePage extends StatelessWidget {
                           ),
                           SizedBox(
                               width: size.width / 2.5,
-                              child: dropdownButton(
-                                  selectedFrontChassisItem, FrontChassis, textTheme)),
+                              child: dropdownButton(selectedFrontChassisItem,
+                                  FrontChassis, textTheme)),
                         ],
                       ),
                     ),
@@ -360,15 +360,15 @@ class MyHomePage extends StatelessWidget {
                           ),
                           SizedBox(
                               width: size.width / 2.5,
-                              child: dropdownButton(
-                                  selectedBackChassisItem, BackChassis, textTheme)),
+                              child: dropdownButton(selectedBackChassisItem,
+                                  BackChassis, textTheme)),
                         ],
                       ),
                     ),
                     const SizedBox(
                       height: 25,
                     ),
-              
+
                     // usage(km)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -385,8 +385,9 @@ class MyHomePage extends StatelessWidget {
                           ),
                           SizedBox(
                               width: size.width / 2.5,
-                              child: const TextFieldWidget(
+                              child: TextFieldWidget(
                                 borderSideColor: Colors.black,
+                                controller: textEditingController,
                                 hintText: "",
                                 obscureText: true,
                               )),
@@ -397,10 +398,6 @@ class MyHomePage extends StatelessWidget {
                       height: 25,
                     ),
 
-
-
-
-              
                     const SizedBox(
                       height: 40,
                     ),
@@ -413,7 +410,26 @@ class MyHomePage extends StatelessWidget {
                           title: "Submit",
                           blu: true,
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          if (textEditingController.text.isEmpty) {
+                            // show error dialog
+                            return;
+                          }
+                          sendToAPI(context, {
+                            'selectedItem': selectedItem,
+                            'selectedColorItem': selectedColorItem,
+                            'selectedTpiItem': selectedTpiItem,
+                            'selectedBackChassisItem': selectedBackChassisItem,
+                            'selectedBodyConditionItem':
+                                selectedBodyConditionItem,
+                            'selectedFrontChassisItem':
+                                selectedFrontChassisItem,
+                            'selectedBrandItem': selectedBrandItem,
+                            'selectedProductionYeaeItem':
+                                selectedProductionYeaeItem,
+                            'km': textEditingController.text
+                          });
+                        },
                       ),
                     ),
                   ],
@@ -422,5 +438,21 @@ class MyHomePage extends StatelessWidget {
             ],
           ),
         ));
+  }
+
+  void sendToAPI(BuildContext context, Map data) {
+    final dio = Dio();
+
+    dio.post('url', data: data).then((value) {
+      print(value.data);
+
+      // value.data is the data recieved from api
+      // can show dialog here
+
+      // data : { asd : price }  =>    for access price => value.data?['asd'].toString();
+    }).catchError((_) {
+      // error in data get
+      // show diolog
+    });
   }
 }
