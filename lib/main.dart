@@ -47,9 +47,6 @@ class MyHomePage extends StatelessWidget {
     List<String> brand = <String>[
       '206 SD V8',
     ];
-    List<String> Gearbox = <String>[
-      'manual',
-    ];
     List<String> BackChassis = <String>[
       'noting',
       'intact',
@@ -63,17 +60,6 @@ class MyHomePage extends StatelessWidget {
       'colored',
     ];
     List<String> BodyCondition = <String>[
-      'noting',
-      'intact',
-      'monor scratch',
-      'collision repair',
-      'colored',
-      'round colored',
-      'whole colored',
-      'accident',
-      'scrap',
-    ];
-    List<String> EngineCondition = <String>[
       'noting',
       'intact',
       'monor scratch',
@@ -137,10 +123,8 @@ class MyHomePage extends StatelessWidget {
     String? selectedTpiItem = '1';
     String? selectedBackChassisItem = 'noting';
     String? selectedBodyConditionItem = 'noting';
-    String? selectedEngineConditionItem = 'noting';
     String? selectedFrontChassisItem = 'noting';
     String? selectedBrandItem = '206 SD V8';
-    String? selectedGearboxItem = 'manual';
     String? selectedProductionYeaeItem = '1401';
     // String? productionYeae = '1401';
     return Scaffold(
